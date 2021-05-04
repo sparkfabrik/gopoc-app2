@@ -22,9 +22,9 @@ jobs:
       - name: Push the tagged Docker image
         run: docker push aypx/gitops-poc-app-2:${GITHUB_SHA}
       - name: Build the tagged Docker image
-        run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:${GITHUB_REF##*/}-${{ steps.vars.outputs.SHORT_SHA }}
+        run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:${GITHUB_REF##*/}-${{ steps.vars.outputs.SHORT_SHA }}-$(date +%s)
       - name: Push the tagged Docker image
-        run: docker push aypx/gitops-poc-app-2:${GITHUB_REF##*/}-${{ steps.vars.outputs.SHORT_SHA }}
+        run: docker push aypx/gitops-poc-app-2:${GITHUB_REF##*/}-${{ steps.vars.outputs.SHORT_SHA }}-$(date +%s)
       - name: Build the latest Docker image
         run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:latest
       - name: Push the latest Docker image
