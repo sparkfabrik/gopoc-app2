@@ -1,0 +1,26 @@
+name: build-gitops-pg
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Build the tagged Docker image
+        run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:${GITHUB_SHA}
+      - name: Push the tagged Docker image
+        run: docker push aypx/gitops-poc-app-2:${GITHUB_SHA}
+      - name: Build the tagged Docker image
+        run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:${GITHUB_REF##*/}
+      - name: Push the tagged Docker image
+        run: docker push aypx/gitops-poc-app-2:${GITHUB_REF##*/}
+      - name: Build the latest Docker image
+        run: docker build . --file Dockerfile --tag aypx/gitops-poc-app-2:latest
+      - name: Push the latest Docker image
+        run: docker push aypx/gitops-poc-app-2:latest
